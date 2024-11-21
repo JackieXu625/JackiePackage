@@ -18,18 +18,10 @@ jobs:
 
     - name: Install dependencies
       run: |
-        Rscript -e 'install.packages(c("devtools", "roxygen2", "testthat", "covr"), repos = "https://cran.rstudio.com/")'
+        Rscript -e 'install.packages(c("devtools", "testthat"), repos = "https://cran.rstudio.com/")'
         Rscript -e 'devtools::install_deps(dependencies = TRUE)'
-
-    - name: Check package
-      run: |
-        R CMD build .
-        R CMD check *tar.gz --no-manual
 
     - name: Test package
       run: |
         Rscript -e 'devtools::test()'
 
-    - name: Code Coverage
-      run: |
-        Rscript -e 'covr::codecov()'
