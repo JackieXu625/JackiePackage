@@ -1,0 +1,149 @@
+---
+title: "Using JackiePackage for Enhanced Linear Regression Analysis"
+author: "Jackie Xu"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using JackiePackage for Enhanced Linear Regression Analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(JackiePackage)
+```
+
+## Introduction
+
+# JackiePackage provides tools designed to enhance linear regression analysis. This package simplifies fitting models, summarizing statistical insights, making predictions, and performing variance analysis through comprehensive ANOVA tables. The aim is to make statistical analysis more accessible and interpretable across different levels of statistical expertise.
+
+## Loading Data
+
+```{r warning=FALSE}
+library(haven)
+data <- read_sas("C:\\Users\\Jianyi Xu\\Desktop\\JackiePackage\\Data\\completedata-4.sas7bdat")
+```
+
+## Model Fitting with JackiePackage
+
+# In this section, I focus on demonstrating how to use the `Fit` function from `JackiePackage` to perform linear regression. The aim is to show the straightforward application of this function on a dataset involving predictors `Age` and `Sex` to predict `Depression`.
+
+```{r}
+selected_data <- data[, c("Age", "Sex", "Depression")]
+fit_result <- Fit(selected_data, "Depression")
+```
+
+## Comparing Fit Capability with Base lm Function
+
+# To ensure users that the Fit function in JackiePackage provides fitting capabilities equivalent to standard methods, I perform a parallel analysis using the traditional lm() function in R. This comparison is solely to demonstrate that the results obtained are comparable, ensuring no loss of functionality when using JackiePackage.
+
+```{r}
+lm_result <- lm(Depression ~ Age + Sex, data = data)
+```
+
+# To ensure the results from `JackiePackage`'s `Fit` function are equivalent to those of R's base `lm()` function, I use `all.equal()` to compare the coefficients obtained from both methods. This demonstrates that `JackiePackage` provides results that are consistent with the established standard in linear regression modeling.
+
+```{r}
+jackie_coefs <- as.vector(fit_result$coefficients)
+lm_coefs <- lm_result$coefficients
+names(jackie_coefs) <- names(lm_coefs)
+coeff_comparison <- all.equal(jackie_coefs, lm_coefs, tolerance = 1e-5)
+print(paste("Coefficient equivalence: ", coeff_comparison))
+```
+
+# To demonstrate the efficiency of `JackiePackage`, I compare the execution time of its `Fit` function with R's base `lm()` function. This comparison highlights the computational advantages of using `JackiePackage` for linear regression modeling. The results show that `JackiePackage`'s implementation is significantly faster while maintaining accuracy. 
+
+```{r}
+library(bench)
+efficiency_comparison <- bench::mark(
+  Jackie = {
+     Fit(selected_data, "Depression")
+  },
+  BaseR = {
+    lm(Depression ~ Age + Sex, data = selected_data)
+  },
+  iterations = 100,
+  check = FALSE 
+)
+print(efficiency_comparison)
+```
+
+## Summary of Model Results
+
+# To evaluate the summary capabilities of JackiePackage, I use the Summary function to analyze the results from the Fit function. This showcases its ability to provide detailed statistical insights, including coefficients, R-squared values, residual standard error, and overall model performance metrics, ensuring clarity and interpretability for users.
+
+```{r}
+Summary(fit_result)
+```
+
+## Comparing Summary Capabilities with Base lm Function
+
+# The `Summary` function in JackiePackage is directly compared to R's `summary.lm()` to confirm consistency in regression outputs such as coefficients, standard errors, t-values, p-values, and R-squared metrics. By reviewing the outputs side-by-side, it is evident that both methods produce comparable and reliable results, ensuring JackiePackage maintains the same interpretability and functionality as the base R implementation.
+
+```{r}
+summary(lm_result)
+Summary(fit_result)
+```
+
+## Performing ANOVA with JackiePackage
+
+# To further assess the linear regression model, I use the ANOVA function from JackiePackage to analyze the variance explained by the predictors. This provides a breakdown of the model's sum of squares, mean squares, F-statistic, and p-value, enabling users to evaluate the overall significance of the regression model. 
+
+```{r}
+ANOVA(fit_result)
+```
+
+## Comparing variance explaining Capabilities with Base lm Function
+
+# To ensure the consistency and reliability of the ANOVA function in JackiePackage, its output is compared with R's base anova() function applied to the same linear model. This comparison demonstrates that the sequential sum of squares and other statistical measures, including mean squares, F-statistics, and p-values, produced by JackiePackage are equivalent to those from the base implementation. 
+
+```{r}
+ANOVA(fit_result)
+anova(lm_result)
+```
+
+## Predicting Values Using JackiePackage
+
+# The Predict function in JackiePackage allows users to make predictions based on a fitted linear regression model. This function takes the model coefficients and new predictor data to generate predicted values for the response variable. 
+
+```{r}
+# New data for prediction
+new_data <- data.frame(
+  Age = c(28, 36, 42),
+  Sex = c(1, 0, 1)
+)
+# Predict using JackiePackage
+jackie_predictions <- Predict(fit_result, new_data)
+print("Predictions using JackiePackage:")
+print(jackie_predictions)
+
+
+```
+
+# I also compare the predicted values generated by JackiePackage with those from the base R predict() function to confirm their equivalence.
+
+```{r}
+# Predict using base R
+lm_result <- lm(Depression ~ Age + Sex, data = data)
+base_predictions <- predict(lm_result, newdata = new_data)
+print("Predictions using Base R:")
+print(base_predictions)
+
+# Confirm equivalence of predictions
+identical_predictions <- all.equal(as.vector(jackie_predictions), as.vector(base_predictions))
+print(paste("Are predictions identical? ", identical_predictions))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
