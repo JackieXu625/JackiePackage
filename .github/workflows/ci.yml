@@ -11,25 +11,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup R environment
       uses: r-lib/actions/setup-r@v2
 
     - name: Install dependencies
       run: |
-        install.packages(c("devtools", "roxygen2", "testthat", "covr"))
-        devtools::install_deps(dependencies = TRUE)
+        Rscript -e 'install.packages(c("devtools", "roxygen2", "testthat", "covr", "knitr", "rmarkdown"))'
+        Rscript -e 'devtools::install_deps(dependencies = TRUE)'
 
     - name: Check package
       run: |
-        R CMD build .
-        R CMD check *tar.gz --no-manual
+        R CMD build . && R CMD check *tar.gz --no-manual
 
     - name: Test package
       run: |
-        devtools::test()
+        Rscript -e 'devtools::test()'
 
     - name: Code Coverage
       run: |
-        covr::codecov()
+        Rscript -e 'covr::codecov()'
