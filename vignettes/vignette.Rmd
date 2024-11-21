@@ -22,7 +22,7 @@ library(JackiePackage)
 
 ```{r warning=FALSE}
 library(haven)
-data <- read_sas("C:\\Users\\Jianyi Xu\\Desktop\\JackiePackage\\Data\\completedata-4.sas7bdat")
+data <- read_sas("C:\\Users\\Jianyi Xu\\Desktop\\JackiePackage1\\Data\\completedata-4.sas7bdat")
 ```
 
 ## Model Fitting with JackiePackage
