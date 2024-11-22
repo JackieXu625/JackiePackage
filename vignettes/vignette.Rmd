@@ -22,7 +22,7 @@ library(JackiePackage)
 
 ```{r warning=FALSE}
 library(haven)
-file_path <- system.file("Data", "completedata-4.sas7bdat", package = "JackiePackage")
+file_path <- system.file("data", "completedata-4.sas7bdat", package = "JackiePackage")
 data <- haven::read_sas(file_path)
 ```
 
