@@ -22,7 +22,8 @@ library(JackiePackage)
 
 ```{r warning=FALSE}
 library(haven)
-data <- read_sas("C:\\Users\\Jianyi Xu\\Desktop\\JackiePackage1\\Data\\completedata-4.sas7bdat")
+file_path <- system.file("Data", "completedata-4.sas7bdat", package = "JackiePackage")
+data <- haven::read_sas(file_path)
 ```
 
 ## Model Fitting with JackiePackage
