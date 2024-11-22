@@ -14,7 +14,7 @@ Suggests:
     haven,
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat
     bench
 VignetteBuilder: knitr
 Config/testthat/edition: 3
