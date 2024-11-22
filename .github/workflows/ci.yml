@@ -18,10 +18,15 @@ jobs:
 
     - name: Install dependencies
       run: |
-        Rscript -e 'install.packages(c("devtools", "testthat"), repos = "https://cran.rstudio.com/")'
-        Rscript -e 'devtools::install_deps(dependencies = TRUE)'
+        Rscript -e 'install.packages(c("testthat"), repos = "https://cran.rstudio.com/")'
+
+    - name: Check package
+      run: |
+        R CMD build .
+        R CMD check *tar.gz --no-manual
 
     - name: Test package
       run: |
-        Rscript -e 'devtools::test()'
+        Rscript -e 'testthat::test_dir("tests/testthat")'
+
 
