@@ -4,6 +4,8 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Jackie", "Xu", , "Jixhaw@umich.edu", role = c("aut", "cre"))
 Description: This package offers a suite of functions designed to simplify and elucidate linear regression analysis for users across different statistical backgrounds. It features capabilities for fitting regression models, summarizing outcomes, predicting values with new data, and conducting variance analysis through ANOVA tables. The primary goal of the package is to streamline complex statistical analysis into more user-friendly operations while maintaining robust analytical rigor.
+Imports: testthat, covr, httr, curl
+Depends: R (>= 4.0.0)
 License: MIT
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
